@@ -1,0 +1,55 @@
+import OpenApp from "https://cdn.skypack.dev/react-open-app";
+
+class CheckList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      inputValue: '',
+      apps: [
+      ],
+    };
+  }
+  
+  addApp() {
+    if (this.state.inputValue!=='') {
+      this.setState({
+        apps: this.state.apps.concat(this.state.inputValue),
+        inputValue: ''
+      });
+    }
+  }
+  removeApp(app) {
+    this.setState({
+      apps: this.state.apps.filter((apps) => apps !== app)
+    });
+  }
+  updateInputValue(evt) {
+    this.setState({inputValue: evt.target.value});
+  }
+
+  render() {
+    const apps = this.state.apps;
+    const applaunch = apps.map((app) => {
+      return (
+        <li key={app}>
+          <button onClick={() => this.removeApp(app)}>-</button>
+          <OpenApp href={app}>{app}</OpenApp>
+        </li>
+      );
+    });
+    
+    return (
+      <div classname="checklist">
+        <ul>
+          {applaunch}
+          <li>
+            <button onClick={() => this.addApp()}>+</button>
+            <input value={this.state.inputValue} onChange={evt => this.updateInputValue(evt)} placeholder="app link"/>
+          </li>
+        </ul>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<CheckList />, document.getElementById("root"));
